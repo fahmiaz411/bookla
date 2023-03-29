@@ -54,7 +54,7 @@ func (h *RESTHandler) CheckRegisteredPhone(c *fiber.Ctx) error {
 		return nil
 	}
 
-	return c.Status(http.StatusBadRequest).JSON(web.BaseResponse{
+	return c.JSON(web.BaseResponse{
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
@@ -100,7 +100,7 @@ func (h *RESTHandler) ValidateOTP(c *fiber.Ctx) error {
 		ExpiredAt: sessionExpiredAt,
 	})
 
-	return c.Status(http.StatusBadRequest).JSON(web.BaseResponse{
+	return c.JSON(web.BaseResponse{
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
@@ -198,7 +198,7 @@ func (h *RESTHandler) Login(c *fiber.Ctx) error {
 		return nil
 	}
 
-	return c.Status(http.StatusBadRequest).JSON(web.BaseResponse{
+	return c.JSON(web.BaseResponse{
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
@@ -256,7 +256,7 @@ func (h *RESTHandler) Register(c *fiber.Ctx) error {
 		return nil
 	}
 
-	return c.Status(http.StatusBadRequest).JSON(web.BaseResponse{
+	return c.JSON(web.BaseResponse{
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
