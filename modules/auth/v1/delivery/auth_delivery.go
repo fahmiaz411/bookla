@@ -36,6 +36,8 @@ func NewRESTHandler(f fiber.Router, usecase interfaces.AuthUsecase) {
 }
 
 func (h *RESTHandler) CheckRegisteredPhone(c *fiber.Ctx) error {
+	var lang string = c.Get(constant.HeaderLanguage, "en")	
+
 	req := domain.CheckRegisteredPhoneRequest{}
 	c.BodyParser(&req)
 
@@ -44,7 +46,7 @@ func (h *RESTHandler) CheckRegisteredPhone(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusBadRequest,
-				Message: message.Required(field.Phone),
+				Message: message.LocalFunc[lang].Required(field.Phone),
 			},
 		})
 	}
@@ -58,13 +60,15 @@ func (h *RESTHandler) CheckRegisteredPhone(c *fiber.Ctx) error {
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
-			Message: message.Success,
+			Message: message.Local[lang].Success,
 		},
 		Data: res,
 	})
 }
 
 func (h *RESTHandler) ValidateOTP(c *fiber.Ctx) error {
+	var lang string = c.Get(constant.HeaderLanguage, "en")	
+
 	req := domain.ValidateOTPRequest{}
 	c.BodyParser(&req)
 
@@ -77,7 +81,7 @@ func (h *RESTHandler) ValidateOTP(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusGone,
-				Message: message.OTPExpired,
+				Message: message.Local[lang].OTPExpired,
 			},
 		})
 	}
@@ -88,7 +92,7 @@ func (h *RESTHandler) ValidateOTP(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusAccepted,
-				Message: message.OTPNotMatch,
+				Message: message.Local[lang].OTPNotMatch,
 			},
 		})
 	}
@@ -104,7 +108,7 @@ func (h *RESTHandler) ValidateOTP(c *fiber.Ctx) error {
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
-			Message: message.Success,
+			Message: message.Local[lang].Success,
 		},
 		Data: domain.ValidateOTPResponse{
 			Phone: serverOtp.Phone,
@@ -115,6 +119,8 @@ func (h *RESTHandler) ValidateOTP(c *fiber.Ctx) error {
 }
 
 func (h *RESTHandler) CheckAvailableUsername(c *fiber.Ctx) error {
+	var lang string = c.Get(constant.HeaderLanguage, "en")	
+
 	req := domain.CheckAvailableUsernameRequest{}
 	c.BodyParser(&req)
 
@@ -123,7 +129,7 @@ func (h *RESTHandler) CheckAvailableUsername(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusBadRequest,
-				Message: message.Required(field.Username),
+				Message: message.LocalFunc[lang].Required(field.Username),
 			},
 		})
 	}
@@ -137,13 +143,15 @@ func (h *RESTHandler) CheckAvailableUsername(c *fiber.Ctx) error {
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
-			Message: message.Success,
+			Message: message.Local[lang].Success,
 		},
 		Data: res,
 	})
 }
 
 func (h *RESTHandler) Login(c *fiber.Ctx) error {
+	var lang string = c.Get(constant.HeaderLanguage, "en")	
+
 	req := domain.LoginRequest{}
 	c.BodyParser(&req)
 
@@ -152,7 +160,7 @@ func (h *RESTHandler) Login(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusBadRequest,
-				Message: message.Required(field.SessionToken),
+				Message: message.LocalFunc[lang].Required(field.SessionToken),
 			},
 		})
 	} else if req.PIN == constant.EmptyString {
@@ -160,7 +168,7 @@ func (h *RESTHandler) Login(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusBadRequest,
-				Message: message.Required(field.PIN),
+				Message: message.LocalFunc[lang].Required(field.PIN),
 			},
 		})
 	}
@@ -172,7 +180,7 @@ func (h *RESTHandler) Login(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusUnauthorized,
-				Message: message.InvalidSessionToken,
+				Message: message.Local[lang].InvalidSessionToken,
 			},
 		})
 	}
@@ -188,7 +196,7 @@ func (h *RESTHandler) Login(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusUnauthorized,
-				Message: message.PinNotMatch,
+				Message: message.Local[lang].PinNotMatch,
 			},
 		})
 	}
@@ -202,13 +210,15 @@ func (h *RESTHandler) Login(c *fiber.Ctx) error {
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
-			Message: message.Success,
+			Message: message.Local[lang].Success,
 		},
 		Data: res,
 	})
 }
 
 func (h *RESTHandler) Register(c *fiber.Ctx) error {
+	var lang string = c.Get(constant.HeaderLanguage, "en")	
+	
 	req := domain.RegisterRequest{}
 	c.BodyParser(&req)
 
@@ -217,7 +227,7 @@ func (h *RESTHandler) Register(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusBadRequest,
-				Message: message.Required(field.SessionToken),
+				Message: message.LocalFunc[lang].Required(field.SessionToken),
 			},
 		})
 	} else if req.Fullname == constant.EmptyString {
@@ -225,7 +235,7 @@ func (h *RESTHandler) Register(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusBadRequest,
-				Message: message.Required(field.Fullname),
+				Message: message.LocalFunc[lang].Required(field.Fullname),
 			},
 		})
 	} else if req.PIN == constant.EmptyString {
@@ -233,7 +243,7 @@ func (h *RESTHandler) Register(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusBadRequest,
-				Message: message.Required(field.PIN),
+				Message: message.LocalFunc[lang].Required(field.PIN),
 			},
 		})
 	}
@@ -245,11 +255,44 @@ func (h *RESTHandler) Register(c *fiber.Ctx) error {
 			Success: false,
 			Meta: web.BaseMeta{
 				Code:    http.StatusUnauthorized,
-				Message: message.InvalidSessionToken,
+				Message: message.Local[lang].InvalidSessionToken,
+			},
+		})
+	} else if sessionBody.ExpiredAt.Unix() < time.Now().UTC().Unix() {
+		return c.Status(http.StatusUnauthorized).JSON(web.BaseResponse{
+			Success: false,
+			Meta: web.BaseMeta{
+				Code:    http.StatusUnauthorized,
+				Message: message.Local[lang].SessionTokenExpired,
 			},
 		})
 	}
+
 	req.Phone = sessionBody.Phone
+
+	if req.Username != constant.EmptyString {
+		checkUsername, err := h.Usecase.CheckAvailableUsername(c, domain.CheckAvailableUsernameRequest{
+			Username: req.Username,
+		})
+		if err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(web.BaseResponse{
+				Success: false,
+				Meta: web.BaseMeta{
+					Code:    http.StatusInternalServerError,
+					Message: err.Error(),
+				},
+			})
+		}
+		if !checkUsername.Available {
+			return c.Status(http.StatusConflict).JSON(web.BaseResponse{
+				Success: false,
+				Meta: web.BaseMeta{
+					Code:    http.StatusConflict,
+					Message: message.LocalFunc[lang].AlreadyExist(field.Username, req.Username),
+				},
+			})
+		}
+	}
 
 	res, err := h.Usecase.Register(c, req)
 	if err != nil {
@@ -260,7 +303,7 @@ func (h *RESTHandler) Register(c *fiber.Ctx) error {
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
-			Message: message.Success,
+			Message: message.Local[lang].Success,
 		},
 		Data: res,
 	})
