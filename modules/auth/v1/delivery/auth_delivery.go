@@ -133,7 +133,7 @@ func (h *RESTHandler) CheckAvailableUsername(c *fiber.Ctx) error {
 		return nil
 	}
 
-	return c.Status(http.StatusBadRequest).JSON(web.BaseResponse{
+	return c.JSON(web.BaseResponse{
 		Success: true,
 		Meta: web.BaseMeta{
 			Code:    http.StatusOK,
